@@ -35,10 +35,25 @@ class DumpingView(TemplateView):
         """По идее надо использовать Django forms для обработки и валидации post данных
         Но сечайс это опустим ;)
         """
-        coords = request.POST.get("coords")
-        route = get_object_or_404(OreCargoTruckRoute, pk=kwargs.get("routeid"))
-        x, y = coords.split()
-        if route.do_dump(int(x), int(y)):
+        success = ""
+
+        try:
+            coords = request.POST.get("coords")
+            route = get_object_or_404(OreCargoTruckRoute, pk=kwargs.get("routeid"))
+            x, y = coords.split()
+            x = int(x)
+            y = int(y)
+        except:
+            messages.add_message(
+                request,
+                messages.INFO,
+                f"Ошибка заполненеия формы",
+            )
+            return http.HttpResponseRedirect(f"/{success}")
+
+
+
+        if route.do_dump(x, y):
             messages.add_message(
                 request,
                 messages.INFO,
@@ -51,5 +66,5 @@ class DumpingView(TemplateView):
                 messages.INFO,
                 f"Разгрузка #{route.truck.board_number} не попала в полигон.",
             )
-            success = ""
+
         return http.HttpResponseRedirect(f"/{success}")
