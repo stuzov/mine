@@ -147,7 +147,7 @@ class OreCargoTruckRoute(OreCargoMixin):
         overload = 100 - self.payload * 100 / self.truck.model.tonnage
         if overload >= 0:
             return None
-        return round(overload, 2)
+        return abs(round(overload, 2))
 
     def is_hit_to_target(self):
         """Проверяем, попала ли разгрузка в полигон"""
