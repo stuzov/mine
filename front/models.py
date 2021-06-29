@@ -145,7 +145,7 @@ class OreCargoTruckRoute(OreCargoMixin):
 
     def get_overload(self):
         overload = 100 - self.payload * 100 / self.truck.model.tonnage
-        if overload <= 0:
+        if overload >= 0:
             return None
         return round(overload, 2)
 
